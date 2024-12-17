@@ -1,34 +1,34 @@
 Parameters:
   LatestAmiId:
     Description: "AMI for EC2"
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
-    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
   Message:
     Description: "Message for HTML page"
     Default: "Cats are the best"
     Type: "String"
 Resources:
   InstanceSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
+    Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: Enable SSH and HTTP access via port 22 IPv4 & port 80 IPv4
       SecurityGroupIngress:
-        - Description: 'Allow SSH IPv4 IN'
+        - Description: "Allow SSH IPv4 IN"
           IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
-          CidrIp: '0.0.0.0/0'
-        - Description: 'Allow HTTP IPv4 IN'
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+        - Description: "Allow HTTP IPv4 IN"
           IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
-          CidrIp: '0.0.0.0/0'
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
   Bucket:
-    Type: 'AWS::S3::Bucket'
+    Type: "AWS::S3::Bucket"
   Instance:
-    Type: 'AWS::EC2::Instance'
+    Type: "AWS::EC2::Instance"
     Metadata:
-      'AWS::CloudFormation::Init':
+      "AWS::CloudFormation::Init":
         config:
           packages:
             yum:
@@ -41,9 +41,9 @@ Resources:
                 region=${AWS::Region}
                 interval=1
                 verbose=true
-              mode: '000400'
-              owner: 'root'
-              group: 'root'
+              mode: "000400"
+              owner: "root"
+              group: "root"
             /etc/cfn/hooks.d/cfn-auto-reloader.conf:
               content: !Sub |
                 [cfn-auto-reloader-hook]
@@ -51,9 +51,9 @@ Resources:
                 path=Resources.Instance.Metadata.AWS::CloudFormation::Init
                 action=/opt/aws/bin/cfn-init -v --stack ${AWS::StackId} --resource Instance --region ${AWS::Region}
                 runas=root
-              mode: '000400'
-              owner: 'root'
-              group: 'root'
+              mode: "000400"
+              owner: "root"
+              group: "root"
             /var/www/html/index.html:
               content: !Sub |
                 <html><head><title>Amazing test page</title></head><body><h1><center>${Message}</center></h1></body></html>
@@ -79,7 +79,7 @@ Resources:
     Properties:
       InstanceType: "t2.micro"
       ImageId: !Ref "LatestAmiId"
-      SecurityGroupIds: 
+      SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       Tags:
         - Key: Name

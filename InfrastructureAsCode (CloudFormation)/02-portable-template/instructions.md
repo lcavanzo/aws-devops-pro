@@ -25,7 +25,3 @@ In this version of the template we remove the Key Pair Parameter and Property on
 if we have other methods of connection such as EC2 Instance Connect, or SSM Session manager (if we configured it). The Key Pair isn't required.
 
 We also remove the manual Parameter for AMIID and reference an SSM parameter which AWS provide, which always references the latest Amazon Linux 2 AMI in that region.
-
-
-
-

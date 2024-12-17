@@ -15,9 +15,9 @@ Parameters:
     AllowedPattern: ^[a-zA-Z0-9]*$
 Resources:
   catpics:
-    Type:  AWS::S3::Bucket
+    Type: AWS::S3::Bucket
   animalpics:
-    Type:  AWS::S3::Bucket
+    Type: AWS::S3::Bucket
   sally:
     Type: AWS::IAM::User
     Properties:
@@ -28,18 +28,19 @@ Resources:
         PasswordResetRequired: "true"
   policy:
     Type: AWS::IAM::ManagedPolicy
-    Properties: 
+    Properties:
       Description: Allow access to all S3 buckets, except catpics
       ManagedPolicyName: AllowAllS3ExceptCats
-      PolicyDocument: 
+      PolicyDocument:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
-            Action: 's3:*'
-            Resource: '*' 
+            Action: "s3:*"
+            Resource: "*"
           - Effect: Deny
-            Action: 's3:*'
-            Resource: [ !GetAtt catpics.Arn, !Join ['', [!GetAtt catpics.Arn, '/*']]]
+            Action: "s3:*"
+            Resource:
+              [!GetAtt catpics.Arn, !Join ["", [!GetAtt catpics.Arn, "/*"]]]
 Outputs:
   catpicsbucketname:
     Description: Bucketname for catpictures (the best animal!)
